@@ -14,5 +14,6 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	log.Printf("Server listening at port %v\n", port)
 	log.Fatalln(server.ListenAndServe())
 }
