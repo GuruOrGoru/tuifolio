@@ -1,0 +1,10 @@
+# Environment files
+.env
+
+# SSH keys
+host_key
+host_key.pub
+
+# Binaries
+server
+tuifolio
