@@ -1,4 +1,5 @@
 .PHONY: all build clean test
+.SILENT: build clean test run
 
 all: build
 
@@ -11,5 +12,5 @@ clean:
 test:
 	go test ./...
 
-run:
-	go run cmd/server/main.go
+run: build
+	./tuifolio

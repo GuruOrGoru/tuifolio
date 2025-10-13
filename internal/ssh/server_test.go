@@ -8,9 +8,10 @@ import (
 
 func TestNewSSHServer(t *testing.T) {
 	port := "2222"
+	host := "localhost"
 	signer := config.GetHostSigner()
 
-	server, err := NewSSHServer(port, signer)
+	server, err := NewSSHServer(port, host, signer)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}

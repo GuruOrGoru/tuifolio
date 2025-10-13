@@ -2,18 +2,27 @@ package config
 
 import (
 	_ "embed"
+	"errors"
 	"os"
 
 	"github.com/joho/godotenv"
 )
 
-func GetPort() string {
-	_ = godotenv.Load(".env") // Ignore error if .env not found
+func GetPort() (string, error) {
+	_ = godotenv.Load(".env")
 	portstr := os.Getenv("PORT")
 	if portstr == "" {
-		portstr = "8080"
+		return "", errors.New("ENV Port not set in .env")
 	}
-	return portstr
+	return portstr, nil
+}
+
+func GetHost() (string, error) {
+	host := os.Getenv("HOST")
+	if host == "" {
+		return "", errors.New("ENV Host not set in .env")
+	}
+	return host, nil
 }
 
 //go:embed host_key

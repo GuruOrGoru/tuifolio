@@ -7,15 +7,15 @@ import (
 
 func TestGetPort(t *testing.T) {
 	os.Unsetenv("PORT")
-	port := GetPort()
-	if port != "8080" {
-		t.Errorf("expected default port 8080, got %s", port)
+	_, err := GetPort()
+	if err == nil {
+		t.Error("expected error when PORT not set")
 	}
 
 	os.Setenv("PORT", "2222")
 	defer os.Unsetenv("PORT")
-	port = GetPort()
-	if port != "2222" {
+	port, err := GetPort()
+	if err != nil || port != "2222" {
 		t.Errorf("expected port 2222, got %s", port)
 	}
 }
