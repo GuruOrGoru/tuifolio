@@ -11,7 +11,9 @@ type model struct {
 }
 
 func NewModel() *model {
-	return &model{}
+	return &model{
+		count: 0,
+	}
 }
 
 func (m *model) Init() tea.Cmd {
