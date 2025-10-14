@@ -20,19 +20,16 @@ func TestNewModel(t *testing.T) {
 func TestModel_Update(t *testing.T) {
 	m := NewModel()
 
-	// Test increase
 	newModel, _ := m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'i'}})
 	if newModel.(*model).count != 1 {
 		t.Errorf("expected count 1 after 'i', got %d", newModel.(*model).count)
 	}
 
-	// Test decrease
 	newModel, _ = newModel.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'d'}})
 	if newModel.(*model).count != 0 {
 		t.Errorf("expected count 0 after 'd', got %d", newModel.(*model).count)
 	}
 
-	// Test quit
 	_, cmd := m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'q'}})
 	if cmd == nil {
 		t.Error("expected quit command on 'q'")
