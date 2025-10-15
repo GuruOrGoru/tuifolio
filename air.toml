@@ -1,0 +1,33 @@
+[build]
+  cmd = "go build -o tuifolio ./cmd/server"
+  bin = "./tuifolio"
+  full_bin = "tuifolio"
+  watch_dir = "."
+  watch_ext = ".go, .yml, .yaml"
+  exclude_dir = ["tmp", "vendor"]
+  exclude_file = []
+  exclude_regex = ["_test.go"]
+  exclude_unchanged = false
+  follow_symlink = false
+  log = "tmp/build-errors.log"
+  poll = false
+  poll_interval = 500
+  rerun = false
+  rerun_delay = 500
+  send_interrupt = false
+  kill_delay = 500
+
+[color]
+  main = "magenta"
+  watcher = "cyan"
+  build = "yellow"
+  runner = "green"
+
+[log]
+  main_only = false
+  time = false
+
+[proxy]
+  enabled = false
+  proxy_port = 0
+  app_port = 0
