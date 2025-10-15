@@ -8,9 +8,18 @@ type Tab int
 
 const (
 	TabHome Tab = iota
-	TabSettings
-	TabHelp
+	TabSkills
+	TabProjects
+	TabContact
 	TabCount
+)
+
+type AppState int
+
+const (
+	StateLogo AppState = iota
+	StateUsernameInput
+	StateMain
 )
 
 type (
@@ -22,25 +31,28 @@ func (t Tab) String() string {
 	switch t {
 	case TabHome:
 		return "Home"
-	case TabSettings:
-		return "Settings"
-	case TabHelp:
-		return "Help"
+	case TabSkills:
+		return "Skills"
+	case TabProjects:
+		return "Projects"
+	case TabContact:
+		return "Contact"
 	}
 	return ""
 }
 
 type KeyMap struct {
-	Up     key.Binding
-	Down   key.Binding
-	Help   key.Binding
-	Quit   key.Binding
-	Select key.Binding
+	Up          key.Binding
+	Down        key.Binding
+	Help        key.Binding
+	Quit        key.Binding
+	Select      key.Binding
 	TabForward  key.Binding
 	TabBackward key.Binding
-	Tab1       key.Binding
-	Tab2       key.Binding
-	Tab3       key.Binding
+	Tab1        key.Binding
+	Tab2        key.Binding
+	Tab3        key.Binding
+	Tab4        key.Binding
 }
 
 func (k KeyMap) ShortHelp() []key.Binding {
@@ -51,7 +63,7 @@ func (k KeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.Up, k.Down, k.Select},
 		{k.Help, k.Quit, k.TabForward, k.TabBackward},
-		{k.Tab1, k.Tab2, k.Tab3},
+		{k.Tab1, k.Tab2, k.Tab3, k.Tab4},
 	}
 }
 
@@ -100,5 +112,9 @@ var Keys = KeyMap{
 	Tab3: key.NewBinding(
 		key.WithKeys("3"),
 		key.WithHelp("3", "go to tab 3"),
+	),
+	Tab4: key.NewBinding(
+		key.WithKeys("4"),
+		key.WithHelp("4", "go to tab 4"),
 	),
 }

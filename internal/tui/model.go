@@ -6,6 +6,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -21,14 +22,22 @@ type Model struct {
 	activeTab     Tab
 	viewport      viewport.Model
 
-	Keys KeyMap
-	Help help.Model
+	Keys     KeyMap
+	Help     help.Model
+	Username string
+	Input    textinput.Model
+	State    AppState
 }
 
 func NewModel() *Model {
 	vp := viewport.New(0, 0)
 	vp.MouseWheelEnabled = true
 	vp.MouseWheelDelta = 3
+	ti := textinput.New()
+	ti.Placeholder = "Enter your username"
+	ti.Focus()
+	ti.CharLimit = 20
+	ti.Width = 20
 	return &Model{
 		Cursor:        0,
 		Choices:       []string{"I am gay", "First Choice", "Second Choice", "Third Choice", "Fourth Choice", "Fifth Choice", "Sixth Choice", "Seventh Choice", "Eighth Choice", "Ninth Choice", "Tenth Choice", "Eleventh Choice", "Twelfth Choice", "Thirteenth Choice", "Fourteenth Choice", "Fifteenth Choice", "Sixteenth Choice", "Seventeenth Choice", "Eighteenth Choice", "Nineteenth Choice", "Twentieth Choice", "Twenty-first Choice", "Twenty-second Choice", "Twenty-third Choice", "Twenty-fourth Choice", "Twenty-fifth Choice", "Twenty-sixth Choice", "Twenty-seventh Choice", "Twenty-eighth Choice", "Twenty-ninth Choice", "Thirtieth Choice", "Thirty-first Choice", "Thirty-second Choice", "Thirty-third Choice", "Thirty-fourth Choice", "Thirty-fifth Choice", "Thirty-sixth Choice", "Thirty-seventh Choice", "Thirty-eighth Choice", "Thirty-ninth Choice", "Fortieth Choice", "Forty-first Choice", "Forty-second Choice", "Forty-third Choice", "Forty-fourth Choice", "Forty-fifth Choice", "Forty-sixth Choice", "Forty-seventh Choice", "Forty-eighth Choice", "Forty-ninth Choice", "Fiftieth Choice", "Fifty-first Choice", "Fifty-second Choice", "Fifty-third Choice", "Fifty-fourth Choice", "Fifty-fifth Choice", "Fifty-sixth Choice", "Fifty-seventh Choice", "Fifty-eighth Choice", "Fifty-ninth Choice", "Sixtieth Choice", "Sixty-first Choice", "Sixty-second Choice", "Sixty-third Choice", "Sixty-fourth Choice", "Sixty-fifth Choice", "Sixty-sixth Choice", "Sixty-seventh Choice", "Sixty-eighth Choice", "Sixty-ninth Choice", "Seventieth Choice", "Seventy-first Choice", "Seventy-second Choice", "Seventy-third Choice", "Seventy-fourth Choice", "Seventy-fifth Choice", "Seventy-sixth Choice", "Seventy-seventh Choice", "Seventy-eighth Choice", "Seventy-ninth Choice", "Eightieth Choice", "Eighty-first Choice", "Eighty-second Choice", "Eighty-third Choice", "Eighty-fourth Choice", "Eighty-fifth Choice", "Eighty-sixth Choice", "Eighty-seventh Choice", "Eighty-eighth Choice", "Eighty-ninth Choice", "Ninetieth Choice", "Ninety-first Choice", "Ninety-second Choice", "Ninety-third Choice", "Ninety-fourth Choice", "Ninety-fifth Choice", "Ninety-sixth Choice", "Ninety-seventh Choice", "Ninety-eighth Choice", "Ninety-ninth Choice", "One Hundredth Choice"},
@@ -40,6 +49,9 @@ func NewModel() *Model {
 		viewport:      vp,
 		Keys:          Keys,
 		Help:          help.New(),
+		Username:      "",
+		Input:         ti,
+		State:         StateLogo,
 	}
 }
 
@@ -51,7 +63,7 @@ func (m *Model) Init() tea.Cmd {
 }
 
 func (m *Model) View() string {
-	header := RenderHeader()
+	header := RenderHeader(m.Username)
 
 	tabStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("240")).
@@ -81,19 +93,19 @@ func (m *Model) View() string {
 	sb.WriteString("\n\n")
 
 	content := ""
-	helpView := RenderHelp(m.Help, m.Keys)
 	outerWidth := int(float64(m.Terminal.Width) * 0.8)
 	outerHeight := int(float64(m.Terminal.Height) * 0.8)
 	innerWidth := outerWidth - 4
 
 	switch m.activeTab {
 	case TabHome:
-		content = RenderList(m.Cursor, m.Choices, m.Selected)
-		content += "\n\n" + helpView
-	case TabSettings:
-		content = "Settings: adjust your preferences.\n\nThis is a longer text to demonstrate scrolling.\n" + strings.Repeat("Setting option number X.\n", 50)
-	case TabHelp:
-		content = "Help: press q to quit, ←/→ or 1/2/3 to switch tabs.\n\n" + strings.Repeat("Helpful information line Y.\n", 50)
+		content = "Welcome to my portfolio!\n\nI'm a passionate developer with experience in various technologies.\n\nUse the tabs above to explore my work and get in touch."
+	case TabSkills:
+		content = "Skills & Technologies\n\n• Programming Languages: Go, Python, JavaScript, TypeScript\n• Web Development: React, Node.js, HTML, CSS\n• Databases: PostgreSQL, MongoDB, Redis\n• Tools: Docker, Git, Linux\n• Cloud: AWS, GCP\n\nAlways learning and exploring new technologies!"
+	case TabProjects:
+		content = "Featured Projects\n\n• Project 1: Description of project 1\n• Project 2: Description of project 2\n• Project 3: Description of project 3\n\nCheck out my GitHub for more projects and contributions."
+	case TabContact:
+		content = "Get In Touch\n\n• Email: siddharthadhakall3722@gmail.com\n• LinkedIn: linkedin.com/in/yourprofile\n• GitHub: github.com/yourusername\n• Twitter: @yourhandle\n\nFeel free to reach out for collaborations or opportunities!"
 	}
 
 	// Set viewport content and size
@@ -101,11 +113,18 @@ func (m *Model) View() string {
 	m.viewport.Height = outerHeight - 4 // account for header and tabs
 	m.viewport.SetContent(content)
 
-	if m.ShowLogo {
+	switch m.State {
+	case StateLogo:
 		return RenderLogo(m.Terminal, m.CursorVisible)
+	case StateUsernameInput:
+		return RenderUsernameInput(m.Terminal, m.Input)
+	case StateMain:
+		// continue to main view
 	}
 
 	sb.WriteString(m.viewport.View())
+	sb.WriteString("\n\n")
+	sb.WriteString(RenderHelp(m.Help, m.Keys))
 
 	return CenterSquareWithContent(m.Terminal.Width, m.Terminal.Height, outerWidth, outerHeight, innerWidth, outerHeight, sb.String())
 }
@@ -114,6 +133,17 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch messages := msg.(type) {
 	case tea.KeyMsg:
+		if m.State == StateUsernameInput {
+			if messages.String() == "enter" {
+				m.Username = m.Input.Value()
+				m.State = StateMain
+				return m, nil
+			}
+			var inputCmd tea.Cmd
+			m.Input, inputCmd = m.Input.Update(messages)
+			return m, inputCmd
+		}
+
 		switch {
 		case key.Matches(messages, m.Keys.Quit):
 			return m, tea.Quit
@@ -160,9 +190,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(messages, m.Keys.Tab1):
 			m.activeTab = TabHome
 		case key.Matches(messages, m.Keys.Tab2):
-			m.activeTab = TabSettings
+			m.activeTab = TabSkills
 		case key.Matches(messages, m.Keys.Tab3):
-			m.activeTab = TabHelp
+			m.activeTab = TabProjects
+		case key.Matches(messages, m.Keys.Tab4):
+			m.activeTab = TabContact
 		case key.Matches(messages, m.Keys.Help):
 			m.Help.ShowAll = !m.Help.ShowAll
 		case messages.String() == "ctrl+d":
@@ -188,7 +220,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.viewport.Width = innerWidth
 		m.viewport.Height = outerHeight - 4
 	case LogoDone:
-		m.ShowLogo = false
+		m.State = StateUsernameInput
 		return m, nil
 	case CursorBlinkMsg:
 		m.CursorVisible = !m.CursorVisible

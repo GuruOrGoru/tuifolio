@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -17,7 +18,15 @@ func RenderLogo(terminal Terminal, cursorVisible bool) string {
 	return lipgloss.Place(terminal.Width, terminal.Height, lipgloss.Center, lipgloss.Center, logo)
 }
 
-func RenderHeader() string {
+func RenderUsernameInput(terminal Terminal, input textinput.Model) string {
+	content := "Welcome to GuruOrGoru!\n\nPlease enter your username:\n\n" + input.View()
+	return lipgloss.Place(terminal.Width, terminal.Height, lipgloss.Center, lipgloss.Center, content)
+}
+
+func RenderHeader(username string) string {
+	if username != "" {
+		return HeaderStyle.Render("Hi " + username)
+	}
 	return HeaderStyle.Render("GuruOrGoru TUI")
 }
 
