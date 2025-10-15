@@ -4,7 +4,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-func RenderContactTab() string {
+func RenderContactTab(cursor int) string {
 
 	contacts := []struct {
 		label string
@@ -22,13 +22,18 @@ func RenderContactTab() string {
 
 	contentParts = append(contentParts, DescriptionStyle.Render("I'm always open to discussing new opportunities, collaborations, or just having a chat about technology!"))
 
-	for _, contact := range contacts {
+	for i, contact := range contacts {
+		prefix := " [ ]"
+		if i == cursor {
+			prefix = ">" + prefix[1:]
+		}
 		contentParts = append(contentParts, ContactItemStyle.Render(
-			ContactLabelStyle.Render(contact.label+": ")+ContactValueStyle.Render(contact.value),
+			prefix+" "+ContactLabelStyle.Render(contact.label+": ")+ContactValueStyle.Render(contact.value),
 		))
 	}
 
 	contentParts = append(contentParts, "")
+	contentParts = append(contentParts, FooterStyle.Render("Use arrow keys to navigate, space to select contact method."))
 	contentParts = append(contentParts, FooterStyle.Render("Feel free to reach out anytime!"))
 
 	return BoxStyle.Render(

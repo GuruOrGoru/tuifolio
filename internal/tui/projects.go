@@ -4,7 +4,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-func RenderProjectsTab() string {
+func RenderProjectsTab(showFull bool) string {
 
 	projects := []struct {
 		title        string
@@ -40,7 +40,16 @@ func RenderProjectsTab() string {
 		contentParts = append(contentParts, ProjectItemStyle.Render(
 			ProjectTitleStyle.Render(project.title),
 		))
-		contentParts = append(contentParts, ProjectDescStyle.Render(project.description))
+		if showFull {
+			contentParts = append(contentParts, ProjectDescStyle.Render(project.description))
+		} else {
+			// Show short desc
+			shortDesc := project.description
+			if len(shortDesc) > 100 {
+				shortDesc = shortDesc[:100] + "..."
+			}
+			contentParts = append(contentParts, ProjectDescStyle.Render(shortDesc))
+		}
 
 		var techs []string
 		for _, tech := range project.technologies {
@@ -50,6 +59,7 @@ func RenderProjectsTab() string {
 		contentParts = append(contentParts, "")
 	}
 
+	contentParts = append(contentParts, FooterStyle.Render("Press space to toggle full/short project descriptions."))
 	contentParts = append(contentParts, FooterStyle.Render("Check out my GitHub for more projects and contributions."))
 
 	return BoxStyle.Render(

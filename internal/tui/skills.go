@@ -4,7 +4,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-func RenderSkillsTab() string {
+func RenderSkillsTab(cursor int, expanded map[int]bool) string {
 
 	skills := []struct {
 		category string
@@ -35,14 +35,26 @@ func RenderSkillsTab() string {
 	var contentParts []string
 	contentParts = append(contentParts, TitleStyle.Render("Skills & Technologies"))
 
-	for _, skill := range skills {
-		contentParts = append(contentParts, SectionStyle.Render(skill.category))
-		for _, item := range skill.items {
-			contentParts = append(contentParts, ItemStyle.Render("• "+item))
+	for i, skill := range skills {
+		prefix := " [ ]"
+		if i == cursor {
+			prefix = ">" + prefix[1:]
+		}
+		if expanded[i] {
+			prefix = prefix[:3] + "+" + prefix[4:]
+		} else {
+			prefix = prefix[:3] + "-" + prefix[4:]
+		}
+		contentParts = append(contentParts, SectionStyle.Render(prefix+" "+skill.category))
+		if expanded[i] {
+			for _, item := range skill.items {
+				contentParts = append(contentParts, ItemStyle.Render("  • "+item))
+			}
 		}
 	}
 
 	contentParts = append(contentParts, "")
+	contentParts = append(contentParts, FooterStyle.Render("Use arrow keys to navigate, space to toggle category visibility."))
 	contentParts = append(contentParts, FooterStyle.Render("Always learning and exploring new technologies!"))
 
 	return BoxStyle.Render(

@@ -27,6 +27,18 @@ type Model struct {
 	Username string
 	Input    textinput.Model
 	State    AppState
+
+	// Interactive states for other tabs
+	SkillsCursor    int
+	SkillsExpanded  map[int]bool
+	ShowFullDetails bool
+	ContactCursor   int
+
+	// Scroll states for each tab
+	HomeScroll     int
+	SkillsScroll   int
+	ProjectsScroll int
+	ContactScroll  int
 }
 
 func NewModel() *Model {
@@ -39,19 +51,27 @@ func NewModel() *Model {
 	ti.CharLimit = 20
 	ti.Width = 20
 	return &Model{
-		Cursor:        0,
-		Choices:       []string{"I am gay", "First Choice", "Second Choice", "Third Choice", "Fourth Choice", "Fifth Choice", "Sixth Choice", "Seventh Choice", "Eighth Choice", "Ninth Choice", "Tenth Choice"},
-		Selected:      make(map[int]struct{}),
-		Terminal:      Terminal{Height: 0, Width: 0},
-		ShowLogo:      true,
-		CursorVisible: true,
-		activeTab:     TabHome,
-		viewport:      vp,
-		Keys:          Keys,
-		Help:          help.New(),
-		Username:      "",
-		Input:         ti,
-		State:         StateLogo,
+		Cursor:          0,
+		Choices:         []string{"Web Development", "Mobile Apps", "Backend Systems", "DevOps & Cloud", "Open Source", "Machine Learning", "UI/UX Design", "Database Design", "API Development", "Testing & QA"},
+		Selected:        make(map[int]struct{}),
+		Terminal:        Terminal{Height: 0, Width: 0},
+		ShowLogo:        true,
+		CursorVisible:   true,
+		activeTab:       TabHome,
+		viewport:        vp,
+		Keys:            Keys,
+		Help:            help.New(),
+		Username:        "",
+		Input:           ti,
+		State:           StateLogo,
+		SkillsCursor:    0,
+		SkillsExpanded:  make(map[int]bool),
+		ShowFullDetails: false,
+		ContactCursor:   0,
+		HomeScroll:      0,
+		SkillsScroll:    0,
+		ProjectsScroll:  0,
+		ContactScroll:   0,
 	}
 }
 
@@ -101,15 +121,28 @@ func (m *Model) View() string {
 	case TabHome:
 		content = RenderHomeTab(m.Cursor, m.Choices, m.Selected)
 	case TabSkills:
-		content = RenderSkillsTab()
+		content = RenderSkillsTab(m.SkillsCursor, m.SkillsExpanded)
 	case TabProjects:
-		content = RenderProjectsTab()
+		content = RenderProjectsTab(m.ShowFullDetails)
 	case TabContact:
-		content = RenderContactTab()
+		content = RenderContactTab(m.ContactCursor)
 	}
 
 	m.viewport.Width = innerWidth
 	m.viewport.Height = outerHeight - 4
+
+	// Set scroll position for the active tab
+	switch m.activeTab {
+	case TabHome:
+		m.viewport.YOffset = m.HomeScroll
+	case TabSkills:
+		m.viewport.YOffset = m.SkillsScroll
+	case TabProjects:
+		m.viewport.YOffset = m.ProjectsScroll
+	case TabContact:
+		m.viewport.YOffset = m.ContactScroll
+	}
+
 	m.viewport.SetContent(content)
 
 	switch m.State {
@@ -146,7 +179,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(messages, m.Keys.Quit):
 			return m, tea.Quit
 		case key.Matches(messages, m.Keys.Up):
-			if m.activeTab == TabHome {
+			switch m.activeTab {
+			case TabHome:
 				if m.Cursor > 0 {
 					m.Cursor--
 					cursorLineInView := m.Cursor - m.viewport.YOffset
@@ -154,11 +188,20 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						m.viewport.ScrollUp(1)
 					}
 				}
-			} else {
+			case TabSkills:
+				if m.SkillsCursor > 0 {
+					m.SkillsCursor--
+				}
+			case TabContact:
+				if m.ContactCursor > 0 {
+					m.ContactCursor--
+				}
+			default:
 				m.viewport.ScrollUp(1)
 			}
 		case key.Matches(messages, m.Keys.Down):
-			if m.activeTab == TabHome {
+			switch m.activeTab {
+			case TabHome:
 				if m.Cursor < len(m.Choices)-1 {
 					m.Cursor++
 					cursorLineInView := m.Cursor - m.viewport.YOffset
@@ -166,16 +209,35 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						m.viewport.ScrollDown(1)
 					}
 				}
-			} else {
+			case TabSkills:
+				if m.SkillsCursor < 4 { // 5 categories
+					m.SkillsCursor++
+				}
+			case TabContact:
+				if m.ContactCursor < 4 { // 5 contacts
+					m.ContactCursor++
+				}
+			default:
 				m.viewport.ScrollDown(1)
 			}
 		case key.Matches(messages, m.Keys.Select):
-			if m.activeTab == TabHome {
+			switch m.activeTab {
+			case TabHome:
 				if _, ok := m.Selected[m.Cursor]; ok {
 					delete(m.Selected, m.Cursor)
 				} else {
 					m.Selected = map[int]struct{}{m.Cursor: {}}
 				}
+			case TabSkills:
+				if _, ok := m.SkillsExpanded[m.SkillsCursor]; ok {
+					delete(m.SkillsExpanded, m.SkillsCursor)
+				} else {
+					m.SkillsExpanded[m.SkillsCursor] = true
+				}
+			case TabProjects:
+				m.ShowFullDetails = !m.ShowFullDetails
+			case TabContact:
+				// Maybe do nothing or show a message, but for now, just highlight
 			}
 		case key.Matches(messages, m.Keys.TabBackward):
 			if m.activeTab > 0 {
@@ -223,5 +285,18 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.CursorVisible = !m.CursorVisible
 		return m, tea.Tick(time.Millisecond*500, func(time.Time) tea.Msg { return CursorBlinkMsg{} })
 	}
+
+	// Update scroll position for the active tab
+	switch m.activeTab {
+	case TabHome:
+		m.HomeScroll = m.viewport.YOffset
+	case TabSkills:
+		m.SkillsScroll = m.viewport.YOffset
+	case TabProjects:
+		m.ProjectsScroll = m.viewport.YOffset
+	case TabContact:
+		m.ContactScroll = m.viewport.YOffset
+	}
+
 	return m, cmd
 }
