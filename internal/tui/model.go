@@ -40,7 +40,7 @@ func NewModel() *Model {
 	ti.Width = 20
 	return &Model{
 		Cursor:        0,
-		Choices:       []string{"I am gay", "First Choice", "Second Choice", "Third Choice", "Fourth Choice", "Fifth Choice", "Sixth Choice", "Seventh Choice", "Eighth Choice", "Ninth Choice", "Tenth Choice", "Eleventh Choice", "Twelfth Choice", "Thirteenth Choice", "Fourteenth Choice", "Fifteenth Choice", "Sixteenth Choice", "Seventeenth Choice", "Eighteenth Choice", "Nineteenth Choice", "Twentieth Choice", "Twenty-first Choice", "Twenty-second Choice", "Twenty-third Choice", "Twenty-fourth Choice", "Twenty-fifth Choice", "Twenty-sixth Choice", "Twenty-seventh Choice", "Twenty-eighth Choice", "Twenty-ninth Choice", "Thirtieth Choice", "Thirty-first Choice", "Thirty-second Choice", "Thirty-third Choice", "Thirty-fourth Choice", "Thirty-fifth Choice", "Thirty-sixth Choice", "Thirty-seventh Choice", "Thirty-eighth Choice", "Thirty-ninth Choice", "Fortieth Choice", "Forty-first Choice", "Forty-second Choice", "Forty-third Choice", "Forty-fourth Choice", "Forty-fifth Choice", "Forty-sixth Choice", "Forty-seventh Choice", "Forty-eighth Choice", "Forty-ninth Choice", "Fiftieth Choice", "Fifty-first Choice", "Fifty-second Choice", "Fifty-third Choice", "Fifty-fourth Choice", "Fifty-fifth Choice", "Fifty-sixth Choice", "Fifty-seventh Choice", "Fifty-eighth Choice", "Fifty-ninth Choice", "Sixtieth Choice", "Sixty-first Choice", "Sixty-second Choice", "Sixty-third Choice", "Sixty-fourth Choice", "Sixty-fifth Choice", "Sixty-sixth Choice", "Sixty-seventh Choice", "Sixty-eighth Choice", "Sixty-ninth Choice", "Seventieth Choice", "Seventy-first Choice", "Seventy-second Choice", "Seventy-third Choice", "Seventy-fourth Choice", "Seventy-fifth Choice", "Seventy-sixth Choice", "Seventy-seventh Choice", "Seventy-eighth Choice", "Seventy-ninth Choice", "Eightieth Choice", "Eighty-first Choice", "Eighty-second Choice", "Eighty-third Choice", "Eighty-fourth Choice", "Eighty-fifth Choice", "Eighty-sixth Choice", "Eighty-seventh Choice", "Eighty-eighth Choice", "Eighty-ninth Choice", "Ninetieth Choice", "Ninety-first Choice", "Ninety-second Choice", "Ninety-third Choice", "Ninety-fourth Choice", "Ninety-fifth Choice", "Ninety-sixth Choice", "Ninety-seventh Choice", "Ninety-eighth Choice", "Ninety-ninth Choice", "One Hundredth Choice"},
+		Choices:       []string{"I am gay", "First Choice", "Second Choice", "Third Choice", "Fourth Choice", "Fifth Choice", "Sixth Choice", "Seventh Choice", "Eighth Choice", "Ninth Choice", "Tenth Choice"},
 		Selected:      make(map[int]struct{}),
 		Terminal:      Terminal{Height: 0, Width: 0},
 		ShowLogo:      true,
@@ -99,18 +99,17 @@ func (m *Model) View() string {
 
 	switch m.activeTab {
 	case TabHome:
-		content = "Welcome to my portfolio!\n\nI'm a passionate developer with experience in various technologies.\n\nUse the tabs above to explore my work and get in touch."
+		content = RenderHomeTab(m.Cursor, m.Choices, m.Selected)
 	case TabSkills:
-		content = "Skills & Technologies\n\n• Programming Languages: Go, Python, JavaScript, TypeScript\n• Web Development: React, Node.js, HTML, CSS\n• Databases: PostgreSQL, MongoDB, Redis\n• Tools: Docker, Git, Linux\n• Cloud: AWS, GCP\n\nAlways learning and exploring new technologies!"
+		content = RenderSkillsTab()
 	case TabProjects:
-		content = "Featured Projects\n\n• Project 1: Description of project 1\n• Project 2: Description of project 2\n• Project 3: Description of project 3\n\nCheck out my GitHub for more projects and contributions."
+		content = RenderProjectsTab()
 	case TabContact:
-		content = "Get In Touch\n\n• Email: siddharthadhakall3722@gmail.com\n• LinkedIn: linkedin.com/in/yourprofile\n• GitHub: github.com/yourusername\n• Twitter: @yourhandle\n\nFeel free to reach out for collaborations or opportunities!"
+		content = RenderContactTab()
 	}
 
-	// Set viewport content and size
 	m.viewport.Width = innerWidth
-	m.viewport.Height = outerHeight - 4 // account for header and tabs
+	m.viewport.Height = outerHeight - 4
 	m.viewport.SetContent(content)
 
 	switch m.State {
@@ -119,7 +118,6 @@ func (m *Model) View() string {
 	case StateUsernameInput:
 		return RenderUsernameInput(m.Terminal, m.Input)
 	case StateMain:
-		// continue to main view
 	}
 
 	sb.WriteString(m.viewport.View())
@@ -213,7 +211,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.Terminal.Width = messages.Width
 		m.Terminal.Height = messages.Height
 		m.Help.Width = messages.Width
-		// Update viewport size
 		outerWidth := int(float64(m.Terminal.Width) * 0.8)
 		outerHeight := int(float64(m.Terminal.Height) * 0.8)
 		innerWidth := outerWidth - 4
