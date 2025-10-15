@@ -12,8 +12,8 @@ func TestNewModel(t *testing.T) {
 	if m.Cursor != 0 {
 		t.Errorf("expected cursor 0, got %d", m.Cursor)
 	}
-	if len(m.Choices) <= 10 {
-		t.Errorf("expected more than 10 choices, got %d", len(m.Choices))
+	if len(m.Choices) != 6 {
+		t.Errorf("expected 6 choices, got %d", len(m.Choices))
 	}
 	if m.Terminal.Width != 0 || m.Terminal.Height != 0 {
 		t.Errorf("expected terminal size 0x0, got %dx%d", m.Terminal.Width, m.Terminal.Height)

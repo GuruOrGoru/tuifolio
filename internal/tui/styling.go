@@ -20,14 +20,14 @@ var (
 			Width(80)
 
 	TitleStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("15")).
+			Foreground(lipgloss.Color("120")).
 			Bold(true).
 			Align(lipgloss.Center).
 			MarginBottom(1)
 
 	CenterOuterStyle = lipgloss.NewStyle().
 				Border(lipgloss.NormalBorder()).
-				BorderForeground(lipgloss.Color("#E95420"))
+				BorderForeground(lipgloss.Color("47"))
 
 	ContactItemStyle = lipgloss.NewStyle().
 				Foreground(lipgloss.Color("252")).

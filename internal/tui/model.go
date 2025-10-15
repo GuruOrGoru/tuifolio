@@ -135,7 +135,13 @@ func (m *Model) View() string {
 	m.viewport.Width = innerWidth
 	m.viewport.Height = outerHeight - 4
 
-	// Set scroll position for the active tab
+	contentHeight := strings.Count(content, "\n") + 1
+	vAlign := lipgloss.Top
+	if contentHeight < outerHeight-4 {
+		vAlign = lipgloss.Center
+	}
+	centeredContent := lipgloss.Place(innerWidth, outerHeight-4, lipgloss.Center, vAlign, content)
+
 	switch m.activeTab {
 	case TabHome:
 		m.viewport.YOffset = m.HomeScroll
@@ -147,7 +153,7 @@ func (m *Model) View() string {
 		m.viewport.YOffset = m.ContactScroll
 	}
 
-	m.viewport.SetContent(content)
+	m.viewport.SetContent(centeredContent)
 
 	switch m.State {
 	case StateLogo:
@@ -222,15 +228,15 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					}
 				}
 			case TabSkills:
-				if m.SkillsCursor < 4 { // 5 categories
+				if m.SkillsCursor < 4 {
 					m.SkillsCursor++
 				}
 			case TabProjects:
-				if m.ProjectsCursor < 8 { // 9 projects
+				if m.ProjectsCursor < 8 {
 					m.ProjectsCursor++
 				}
 			case TabContact:
-				if m.ContactCursor < 4 { // 5 contacts
+				if m.ContactCursor < 4 {
 					m.ContactCursor++
 				}
 			default:
@@ -255,7 +261,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.ShowModal = true
 				}
 			case TabContact:
-				// Maybe do nothing or show a message, but for now, just highlight
 			}
 		case key.Matches(messages, m.Keys.TabBackward):
 			if m.activeTab > 0 {
