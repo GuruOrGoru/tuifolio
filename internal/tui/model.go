@@ -29,10 +29,11 @@ type Model struct {
 	State    AppState
 
 	// Interactive states for other tabs
-	SkillsCursor    int
-	SkillsExpanded  map[int]bool
-	ShowFullDetails bool
-	ContactCursor   int
+	SkillsCursor   int
+	SkillsExpanded map[int]bool
+	ProjectsCursor int
+	ShowModal      bool
+	ContactCursor  int
 
 	// Scroll states for each tab
 	HomeScroll     int
@@ -51,27 +52,28 @@ func NewModel() *Model {
 	ti.CharLimit = 20
 	ti.Width = 20
 	return &Model{
-		Cursor:          0,
-		Choices:         []string{"Web Development", "Mobile Apps", "Backend Systems", "DevOps & Cloud", "Open Source", "Machine Learning", "UI/UX Design", "Database Design", "API Development", "Testing & QA"},
-		Selected:        make(map[int]struct{}),
-		Terminal:        Terminal{Height: 0, Width: 0},
-		ShowLogo:        true,
-		CursorVisible:   true,
-		activeTab:       TabHome,
-		viewport:        vp,
-		Keys:            Keys,
-		Help:            help.New(),
-		Username:        "",
-		Input:           ti,
-		State:           StateLogo,
-		SkillsCursor:    0,
-		SkillsExpanded:  make(map[int]bool),
-		ShowFullDetails: false,
-		ContactCursor:   0,
-		HomeScroll:      0,
-		SkillsScroll:    0,
-		ProjectsScroll:  0,
-		ContactScroll:   0,
+		Cursor:         0,
+		Choices:        []string{"Web Development", "Mobile Apps", "Backend Systems", "DevOps & Cloud", "Open Source", "Machine Learning", "UI/UX Design", "Database Design", "API Development", "Testing & QA"},
+		Selected:       make(map[int]struct{}),
+		Terminal:       Terminal{Height: 0, Width: 0},
+		ShowLogo:       true,
+		CursorVisible:  true,
+		activeTab:      TabHome,
+		viewport:       vp,
+		Keys:           Keys,
+		Help:           help.New(),
+		Username:       "",
+		Input:          ti,
+		State:          StateLogo,
+		SkillsCursor:   0,
+		SkillsExpanded: make(map[int]bool),
+		ProjectsCursor: 0,
+		ShowModal:      false,
+		ContactCursor:  0,
+		HomeScroll:     0,
+		SkillsScroll:   0,
+		ProjectsScroll: 0,
+		ContactScroll:  0,
 	}
 }
 
@@ -123,7 +125,11 @@ func (m *Model) View() string {
 	case TabSkills:
 		content = RenderSkillsTab(m.SkillsCursor, m.SkillsExpanded)
 	case TabProjects:
-		content = RenderProjectsTab(m.ShowFullDetails)
+		if m.ShowModal {
+			content = RenderProjectModal(m.ProjectsCursor, innerWidth, outerHeight-4)
+		} else {
+			content = RenderProjectsTab(m.ProjectsCursor)
+		}
 	case TabContact:
 		content = RenderContactTab(m.ContactCursor)
 	}
@@ -177,6 +183,10 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		switch {
 		case key.Matches(messages, m.Keys.Quit):
+			if m.ShowModal {
+				m.ShowModal = false
+				return m, nil
+			}
 			return m, tea.Quit
 		case key.Matches(messages, m.Keys.Up):
 			switch m.activeTab {
@@ -191,6 +201,10 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case TabSkills:
 				if m.SkillsCursor > 0 {
 					m.SkillsCursor--
+				}
+			case TabProjects:
+				if m.ProjectsCursor > 0 {
+					m.ProjectsCursor--
 				}
 			case TabContact:
 				if m.ContactCursor > 0 {
@@ -212,6 +226,10 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case TabSkills:
 				if m.SkillsCursor < 4 { // 5 categories
 					m.SkillsCursor++
+				}
+			case TabProjects:
+				if m.ProjectsCursor < 3 { // 4 projects
+					m.ProjectsCursor++
 				}
 			case TabContact:
 				if m.ContactCursor < 4 { // 5 contacts
@@ -235,7 +253,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.SkillsExpanded[m.SkillsCursor] = true
 				}
 			case TabProjects:
-				m.ShowFullDetails = !m.ShowFullDetails
+				if !m.ShowModal {
+					m.ShowModal = true
+				}
 			case TabContact:
 				// Maybe do nothing or show a message, but for now, just highlight
 			}
