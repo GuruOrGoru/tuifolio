@@ -11,10 +11,10 @@ func RenderContactTab(cursor int) string {
 		value string
 	}{
 		{"Email", "siddharthadhakall3722@gmail.com"},
-		{"LinkedIn", "linkedin.com/in/yourprofile"},
-		{"GitHub", "github.com/yourusername"},
-		{"Twitter", "@yourhandle"},
-		{"Website", "yourwebsite.com"},
+		{"LinkedIn", "linkedin.com/in/guruorgoru"},
+		{"GitHub", "github.com/guruorgoru"},
+		{"Twitter", "@guruorgoru"},
+		{"Website", "guruorgoru.surge.sh"},
 	}
 
 	var contentParts []string
@@ -33,7 +33,7 @@ func RenderContactTab(cursor int) string {
 	}
 
 	contentParts = append(contentParts, "")
-	contentParts = append(contentParts, FooterStyle.Render("Use arrow keys to navigate, space to select contact method."))
+	contentParts = append(contentParts, FooterStyle.Render("Use arrow keys/Vim keys to navigate."))
 	contentParts = append(contentParts, FooterStyle.Render("Feel free to reach out anytime!"))
 
 	return BoxStyle.Render(

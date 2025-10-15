@@ -12,23 +12,23 @@ func RenderSkillsTab(cursor int, expanded map[int]bool) string {
 	}{
 		{
 			category: "Programming Languages",
-			items:    []string{"Go", "Python", "JavaScript", "TypeScript", "Rust"},
+			items:    []string{"Go", "C", "C#", "Ruby", "Python", "Elixir(just started)"},
 		},
 		{
 			category: "Web Development",
-			items:    []string{"React", "Node.js", "HTML5", "CSS3", "Next.js"},
+			items:    []string{"HTMX", "React", "Gin", "Chi", "Gorm", "Fiber", "Postman"},
 		},
 		{
 			category: "Databases",
-			items:    []string{"PostgreSQL", "MongoDB", "Redis", "MySQL"},
+			items:    []string{"SQLite", "PostgreSQL", "Supabase", "MongoDB"},
 		},
 		{
 			category: "Tools & Technologies",
-			items:    []string{"Docker", "Kubernetes", "Git", "Linux", "AWS"},
+			items:    []string{"BubbleTea", "Nvim", "Git", "Bruno", "Wish", "Docker", "Kubernetes", "Linux"},
 		},
 		{
 			category: "Other Skills",
-			items:    []string{"System Design", "API Development", "Testing", "CI/CD"},
+			items:    []string{"CLI Development", "TUI Development", "SSH Servers", "API Security", "Algorithms"},
 		},
 	}
 
@@ -54,7 +54,7 @@ func RenderSkillsTab(cursor int, expanded map[int]bool) string {
 	}
 
 	contentParts = append(contentParts, "")
-	contentParts = append(contentParts, FooterStyle.Render("Use arrow keys to navigate, space to toggle category visibility."))
+	contentParts = append(contentParts, FooterStyle.Render("Use arrow keys/Vim motions to navigate, space to toggle category visibility."))
 	contentParts = append(contentParts, FooterStyle.Render("Always learning and exploring new technologies!"))
 
 	return BoxStyle.Render(

@@ -28,14 +28,12 @@ type Model struct {
 	Input    textinput.Model
 	State    AppState
 
-	// Interactive states for other tabs
 	SkillsCursor   int
 	SkillsExpanded map[int]bool
 	ProjectsCursor int
 	ShowModal      bool
 	ContactCursor  int
 
-	// Scroll states for each tab
 	HomeScroll     int
 	SkillsScroll   int
 	ProjectsScroll int
@@ -53,7 +51,7 @@ func NewModel() *Model {
 	ti.Width = 20
 	return &Model{
 		Cursor:         0,
-		Choices:        []string{"Web Development", "Mobile Apps", "Backend Systems", "DevOps & Cloud", "Open Source", "Machine Learning", "UI/UX Design", "Database Design", "API Development", "Testing & QA"},
+		Choices:        []string{"Backend Development", "Web Development", "LSP Integrations", "Cloud-Native Development", "CLI Development", "TUI Development"},
 		Selected:       make(map[int]struct{}),
 		Terminal:       Terminal{Height: 0, Width: 0},
 		ShowLogo:       true,
@@ -228,7 +226,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.SkillsCursor++
 				}
 			case TabProjects:
-				if m.ProjectsCursor < 3 { // 4 projects
+				if m.ProjectsCursor < 8 { // 9 projects
 					m.ProjectsCursor++
 				}
 			case TabContact:
@@ -306,7 +304,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Tick(time.Millisecond*500, func(time.Time) tea.Msg { return CursorBlinkMsg{} })
 	}
 
-	// Update scroll position for the active tab
 	switch m.activeTab {
 	case TabHome:
 		m.HomeScroll = m.viewport.YOffset

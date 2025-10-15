@@ -15,19 +15,21 @@ func RenderHomeTab(cursor int, choices []string, selected map[int]struct{}) stri
 		content += "Here are some of my skills and interests:\n\n"
 
 		for i, choice := range choices {
-			prefix := " [ ]"
+			prefix := "[ ]"
 			if _, ok := selected[i]; ok {
 				prefix = "[X]"
 			}
 			if i == cursor {
-				prefix = ">" + prefix[1:]
+				prefix = "->" + prefix[0:]
 				content += PointedLineStyle.Render(prefix + choice) + "\n"
+			} else if _, ok := selected[i]; ok {
+				content += SelectedLineStyle.Render(prefix + choice) + "\n"
 			} else {
 				content += NormalLineStyle.Render(prefix + choice) + "\n"
 			}
 		}
 
-		content += "\nUse the arrow keys to navigate and space to select/deselect skills."
+		content += "\nUse the arrow keys/Vim motion to navigate and space to select/deselect skills."
 	}
 
 	return BoxStyle.Render(
