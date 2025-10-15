@@ -15,10 +15,6 @@ A beautiful, interactive terminal-based portfolio application built with Go and 
 - **Mouse Support**: Scroll and interact with mouse wheel
 - **Keyboard Shortcuts**: Full keyboard navigation support
 
-## Screenshots
-
-*(Add screenshots here when available)*
-
 ## Prerequisites
 
 - Go 1.25.1 or later
