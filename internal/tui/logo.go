@@ -8,6 +8,6 @@ func RenderLogo(terminal Terminal, cursorVisible bool) string {
 	if cursorVisible {
 		cursor = "█"
 	}
-	logo = LogoStyle.Render("GuruOrGoru") + CursorStyle.Render(cursor)
+	logo = LogoStyle.Render(logo) + CursorStyle.Render(cursor)
 	return lipgloss.Place(terminal.Width, terminal.Height, lipgloss.Center, lipgloss.Center, logo)
 }

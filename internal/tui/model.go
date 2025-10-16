@@ -286,11 +286,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.viewport.PageUp()
 		}
 	case tea.MouseMsg:
-		switch messages.Type {
-		case tea.MouseWheelUp:
-			m.viewport.ScrollUp(m.viewport.MouseWheelDelta)
-		case tea.MouseWheelDown:
-			m.viewport.ScrollDown(m.viewport.MouseWheelDelta)
+		switch messages.Action {
+		case tea.MouseAction(tea.MouseButtonWheelUp):
+		        m.viewport.ScrollUp(m.viewport.MouseWheelDelta)
+		case tea.MouseAction(tea.MouseButtonWheelDown):
+		        m.viewport.ScrollDown(m.viewport.MouseWheelDelta)
 		}
 	case tea.WindowSizeMsg:
 		m.Terminal.Width = messages.Width
