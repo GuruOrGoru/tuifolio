@@ -47,6 +47,5 @@ jobs:
       run: docker build -t tuifolio .
 
     - name: Create dummy SSH host key
-        run:
-          ssh-keygen -t rsa -b 2048 -f ./internal/config/host_key -N ""
+      run: ssh-keygen -t rsa -b 2048 -f ./internal/config/host_key -N ""
 
