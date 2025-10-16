@@ -59,19 +59,7 @@ Create a `.env` file based on `.env.example`:
 # Server Configuration
 PORT=2222
 HOST=localhost
-
-# Email Configuration for Contact Form
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
 ```
-
-### Email Setup (Gmail)
-
-1. Enable 2-factor authentication on your Gmail account
-2. Generate an App Password: [Google App Passwords](https://support.google.com/accounts/answer/185833)
-3. Use the App Password in `SMTP_PASS` (not your regular password)
 
 ## Usage
 
@@ -85,6 +73,10 @@ SMTP_PASS=your-app-password
 2. Connect via SSH:
    ```bash
    ssh localhost -p 2222
+
+   or,
+
+   ssh ssh://localhost:2222(if you are a frontend engineer!!)
    ```
 
 3. Enter your username when prompted
