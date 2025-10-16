@@ -1,5 +1,7 @@
 # Tuifolio
 
+![CI](https://github.com/guruorgoru/tuifolio/workflows/CI/badge.svg)
+
 A beautiful, interactive terminal-based portfolio application built with Go and Bubbletea. Tuifolio allows you to showcase your skills, projects, and contact information in a sleek TUI (Terminal User Interface) accessible via SSH.
 
 ## Features
