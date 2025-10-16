@@ -90,8 +90,8 @@ SMTP_PASS=your-app-password
 3. Enter your username when prompted
 
 4. Navigate using:
-   - **Tab/Shift+Tab**: Switch between tabs
-   - **Arrow Keys**: Navigate within tabs
+   - **Tab/Shift+Tab/H/L/W/B/1234**: Switch between tabs
+   - **Arrow Keys/Vim motions(j/k)**: Navigate within tabs
    - **Enter/Space**: Select items
    - **q**: Quit
    - **?**: Toggle help
@@ -138,9 +138,10 @@ internal/
 
 | Key | Action |
 |-----|--------|
-| Tab | Next tab |
-| Shift+Tab | Previous tab |
-| ↑/↓ | Navigate |
+| Tab/L/W | Next tab |
+| Shift+Tab/H/B | Previous tab |
+| 1/2/3/4 | Corresponding Tab numbers |
+| ↑/↓/j/k | Navigate |
 | Enter/Space | Select |
 | q | Quit |
 | ? | Toggle help |
