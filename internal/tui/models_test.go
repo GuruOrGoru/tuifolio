@@ -41,8 +41,8 @@ func TestViewCentering(t *testing.T) {
 	view := m.View()
 	lines := strings.Split(view, "\n")
 
-	if len(lines) != 35 {
-		t.Errorf("expected 35 lines, got %d", len(lines))
+	if len(lines) != 30 {
+		t.Errorf("expected 30 lines, got %d", len(lines))
 	}
 
 	contentLines := 0

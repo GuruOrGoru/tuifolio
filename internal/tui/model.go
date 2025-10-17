@@ -75,6 +75,18 @@ func NewModel() *Model {
 	}
 }
 
+func (m *Model) getSkillsCursorLine() int {
+	line := 1 // title
+	itemsCounts := []int{6, 7, 4, 8, 5}
+	for j := 0; j < m.SkillsCursor; j++ {
+		line += 1 // category header
+		if m.SkillsExpanded[j] {
+			line += itemsCounts[j]
+		}
+	}
+	return line
+}
+
 func (m *Model) Init() tea.Cmd {
 	return tea.Batch(
 		tea.Tick(time.Millisecond*1500, func(time.Time) tea.Msg { return LogoDone{} }),
@@ -205,6 +217,10 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case TabSkills:
 				if m.SkillsCursor > 0 {
 					m.SkillsCursor--
+					cursorLine := m.getSkillsCursorLine()
+					if cursorLine < m.viewport.YOffset {
+						m.viewport.ScrollUp(1)
+					}
 				}
 			case TabProjects:
 				if m.ProjectsCursor > 0 {
@@ -230,6 +246,10 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case TabSkills:
 				if m.SkillsCursor < 4 {
 					m.SkillsCursor++
+					cursorLine := m.getSkillsCursorLine()
+					if cursorLine-m.viewport.YOffset >= m.viewport.Height {
+						m.viewport.ScrollDown(1)
+					}
 				}
 			case TabProjects:
 				if m.ProjectsCursor < 8 {
@@ -288,9 +308,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.MouseMsg:
 		switch messages.Action {
 		case tea.MouseAction(tea.MouseButtonWheelUp):
-		        m.viewport.ScrollUp(m.viewport.MouseWheelDelta)
+			m.viewport.ScrollUp(m.viewport.MouseWheelDelta)
 		case tea.MouseAction(tea.MouseButtonWheelDown):
-		        m.viewport.ScrollDown(m.viewport.MouseWheelDelta)
+			m.viewport.ScrollDown(m.viewport.MouseWheelDelta)
 		}
 	case tea.WindowSizeMsg:
 		m.Terminal.Width = messages.Width
