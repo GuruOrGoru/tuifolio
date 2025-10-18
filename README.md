@@ -15,7 +15,7 @@ A beautiful, interactive terminal-based portfolio application built with Go and 
   - Contact: Get in touch via integrated contact form
 - **Responsive Design**: Adapts to different terminal sizes
 - **Mouse Support**: Scroll and interact with mouse wheel
-- **Keyboard Shortcuts**: Full keyboard navigation support
+- **Keyboard Shortcuts**: Full vim like keyboard navigation support
 
 ## Prerequisites
 
