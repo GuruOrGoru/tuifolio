@@ -10,8 +10,8 @@ func RenderProjectsTab(cursor int) string {
 		link  string
 	}{
 		{
-			title: "Pokedex CLI",
-			link:  "https://github.com/GuruOrGoru/pokedex",
+			title: "The GURU MMO",
+			link:  "https://github.com/GuruOrGoru/mmo",
 		},
 		{
 			title: "Inclusiv",
@@ -22,16 +22,16 @@ func RenderProjectsTab(cursor int) string {
 			link:  "https://github.com/GuruOrGoru/tuifolio",
 		},
 		{
-			title: "Password Manager",
-			link:  "https://github.com/GuruOrGoru/passguru",
+			title: "Interpreter",
+			link:  "https://github.com/GuruOrGoru/making-an-interpreter-in-go",
 		},
 		{
-			title: "Personal Website",
-			link:  "https://github.com/GuruOrGoru/GuruOrGoru.github.io",
+			title: "Lsp-Server",
+			link:  "https://github.com/GuruOrGoru/lsp-server",
 		},
 		{
-			title: "Adarsha-School-Server",
-			link:  "https://github.com/GuruOrGoru/adarsha-server",
+			title: "HTTP Server IN go",
+			link:  "https://github.com/GuruOrGoru/http-server-in-go",
 		},
 		{
 			title: "Fragiment(Code Snippet Sharing Platform)",
@@ -40,10 +40,6 @@ func RenderProjectsTab(cursor int) string {
 		{
 			title: "GuruVim",
 			link:  "github.com/GuruOrGoru/guruvim",
-		},
-		{
-			title: "interpreter-for-guruverbal",
-			link:  "https://github.com/GuruOrGoru/Making-An-Interpreter-in-Go",
 		},
 	}
 
@@ -75,10 +71,10 @@ func RenderProjectModal(projectIndex int, width int, height int) string {
 		technologies []string
 	}{
 		{
-			title:        "Pokedex CLI",
-			link:         "https://github.com/GuruOrGoru/pokedex",
-			description:  "A command-line REPL for a Pokemon encyclopedia built with Go. Includes utility functions for input cleaning and command handling.",
-			technologies: []string{"Go"},
+			title:        "The GURU MMO",
+			link:         "https://github.com/GuruOrGoru/mmo",
+			description:  "A go based MMO game designed to support many users concurrently, game mechanics is kinda default with collecting spores and competing like agar.io",
+			technologies: []string{"Go", "godot"},
 		},
 		{
 			title:        "Inclusiv",
@@ -93,22 +89,22 @@ func RenderProjectModal(projectIndex int, width int, height int) string {
 			technologies: []string{"Go", "Bubble Tea"},
 		},
 		{
-			title:        "Password Manager",
-			link:         "https://github.com/GuruOrGoru/passguru",
-			description:  "A secure password manager built with Go and Chi router. Includes environment configuration and vendor dependencies for robust functionality.",
-			technologies: []string{"Go", "Chi", "Security"},
+			title:        "Interpreter",
+			link:         "https://github.com/GuruOrGoru/making-an-interpreter-in-go",
+			description:  "An interpreter purely based on nepali language, more commanly roman scripted nepali language with keywords like manau x=5; yadi satya {}, etc",
+			technologies: []string{"Go", "language-architecture"},
 		},
 		{
-			title:        "Personal Website",
-			link:         "https://github.com/GuruOrGoru/GuruOrGoru.github.io",
-			description:  "Horror-themed personal website with interactive animations, sound effects, and dynamic content. Built with modern web technologies for an immersive experience.",
-			technologies: []string{"HTML", "CSS", "JavaScript", "Alpine.js", "GSAP", "Howler", "Tailwind CSS"},
+			title:        "Lsp-Server",
+			link:         "https://github.com/GuruOrGoru/lsp-server",
+			description:  "A lsp server written in go under a 4 hr coding challenge, has basic lsp stuffs like completions, code actions and diagonostics.",
+			technologies: []string{"Go", "VIM", "HTTP"},
 		},
 		{
-			title:        "Adarsha-School-Server",
-			link:         "https://github.com/GuruOrGoru/adarsha-server",
-			description:  "Backend for the Adarsha School Website, a web application designed to provide information about the school, manage content, and handle school-related functionalities. Utilizes Go templates for dynamic content serving, modular routing with go-chi/chi, and CORS support.",
-			technologies: []string{"Go", "Chi", "Supabase"},
+			title:        "HTTP Server IN go",
+			link:         "https://github.com/GuruOrGoru/http-server-in-go",
+			description:  "A http server writtn in go, solely for learning purposes. Consists of chunked encoding, proper request handling in a modular approach",
+			technologies: []string{"Go", "HTTP"},
 		},
 		{
 			title:        "Fragiment(Code Snippet Sharing Platform)",
@@ -121,12 +117,6 @@ func RenderProjectModal(projectIndex int, width int, height int) string {
 			link:         "github.com/GuruOrGoru/guruvim",
 			description:  "A personal Neovim setup using lazy.nvim for plugin management, with plugins for autopair, completion, LSP, telescope, and more.",
 			technologies: []string{"Vim", "Shell"},
-		},
-		{
-			title:        "interpreter-for-guruverbal",
-			link:         "https://github.com/GuruOrGoru/Making-An-Interpreter-in-Go",
-			description:  "An interpreter for a custom programming language implemented in Go, following the book 'Writing An Interpreter In Go'.",
-			technologies: []string{"Go"},
 		},
 	}
 
