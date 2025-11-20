@@ -1,5 +1,16 @@
 # Tuifolio
 
+## Screenshots
+
+![Screenshot 1](ss/screenshot-2025-11-20_22-41-19.png)
+![Screenshot 2](ss/screenshot-2025-11-20_22-41-31.png)
+![Screenshot 3](ss/screenshot-2025-11-20_22-41-45.png)
+![Screenshot 4](ss/screenshot-2025-11-20_22-41-57.png)
+![Screenshot 5](ss/screenshot-2025-11-20_22-42-14.png)
+![Screenshot 6](ss/screenshot-2025-11-20_22-42-23.png)
+![Screenshot 7](ss/screenshot-2025-11-20_22-42-33.png)
+![Screenshot 8](ss/screenshot-2025-11-20_22-42-50.png)
+
 ![CI](https://github.com/guruorgoru/tuifolio/workflows/CI/badge.svg)
 
 A beautiful, interactive terminal-based portfolio application built with Go and Bubbletea. Tuifolio allows you to showcase your skills, projects, and contact information in a sleek TUI (Terminal User Interface) accessible via SSH.
